@@ -1,11 +1,11 @@
 {
     "format_version": 2,
-    "tooth": "my-mod",
-    "version": "0.0.0",
+    "tooth": "PlayerRegister",
+    "version": "0.1.0",
     "info": {
-        "name": "My Mod Name",
-        "description": "My Mod Description",
-        "author": "My Name",
+        "name": "PlayerRegister",
+        "description": "",
+        "author": "edshPC",
         "tags": [
             "levilamina",
             "mod"
@@ -13,13 +13,13 @@
     },
     "asset_url": "My Asset Url",
     "prerequisites": {
-        "github.com/LiteLDev/LeviLamina": "My LeviLamina Dependency Version"
+        "github.com/LiteLDev/LeviLamina": "0.13.5"
     },
     "files": {
         "place": [
             {
-                "src": "my-mod/*",
-                "dest": "plugins/my-mod/"
+                "src": "PlayerRegister/*",
+                "dest": "plugins/PlayerRegister/"
             }
         ]
     }

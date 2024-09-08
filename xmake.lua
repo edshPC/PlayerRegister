@@ -5,13 +5,13 @@ add_repositories("liteldev-repo https://github.com/LiteLDev/xmake-repo.git")
 -- add_requires("levilamina x.x.x") for a specific version
 -- add_requires("levilamina develop") to use develop version
 -- please note that you should add bdslibrary yourself if using dev version
-add_requires("levilamina")
+add_requires("levilamina 0.13.5")
 
 if not has_config("vs_runtime") then
     set_runtimes("MD")
 end
 
-target("my-mod") -- Change this to your mod name.
+target("PlayerRegister") -- Change this to your mod name.
     add_cxflags(
         "/EHa",
         "/utf-8",

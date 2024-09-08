@@ -46,6 +46,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+/.run
 
 # https://github.com/github/gitignore/blob/main/Global/Ninja.gitignore
 .ninja_deps

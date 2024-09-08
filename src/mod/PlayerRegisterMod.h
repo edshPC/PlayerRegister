@@ -2,14 +2,14 @@
 
 #include "ll/api/mod/NativeMod.h"
 
-namespace my_mod {
+namespace PlayerRegister {
 
-class MyMod {
+class PlayerRegisterMod {
 
 public:
-    static MyMod& getInstance();
+    static PlayerRegisterMod& getInstance();
 
-    MyMod(ll::mod::NativeMod& self) : mSelf(self) {}
+    PlayerRegisterMod(ll::mod::NativeMod& self) : mSelf(self) {}
 
     [[nodiscard]] ll::mod::NativeMod& getSelf() const { return mSelf; }
 
