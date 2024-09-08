@@ -4,6 +4,9 @@
 
 namespace PlayerRegister {
 
+bool registerEvents();
+bool setupHooks();
+
 class PlayerRegisterMod {
 
 public:

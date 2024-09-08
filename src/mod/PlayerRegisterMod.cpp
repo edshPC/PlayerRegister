@@ -4,6 +4,8 @@
 
 #include "ll/api/mod/RegisterHelper.h"
 
+#include "Database.h"
+
 namespace PlayerRegister {
 
 static std::unique_ptr<PlayerRegisterMod> instance;
@@ -11,20 +13,15 @@ static std::unique_ptr<PlayerRegisterMod> instance;
 PlayerRegisterMod& PlayerRegisterMod::getInstance() { return *instance; }
 
 bool PlayerRegisterMod::load() {
-    getSelf().getLogger().debug("Loading...");
-    // Code for loading the mod goes here.
-    return true;
+    return Database::init() && setupHooks() && registerEvents();
 }
 
 bool PlayerRegisterMod::enable() {
-    getSelf().getLogger().debug("Enabling...");
-    // Code for enabling the mod goes here.
+    PlayerManager::setFakeUUID("player_server_61e12c79-09f6-4cd1-b752-6f7cd8d25ea5", "player_server_66612c79-09f6-4cd1-b752-6f7cd8d25ea5");
     return true;
 }
 
 bool PlayerRegisterMod::disable() {
-    getSelf().getLogger().debug("Disabling...");
-    // Code for disabling the mod goes here.
     return true;
 }
 
