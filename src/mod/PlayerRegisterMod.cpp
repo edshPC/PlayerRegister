@@ -17,7 +17,6 @@ bool PlayerRegisterMod::load() {
 }
 
 bool PlayerRegisterMod::enable() {
-    PlayerManager::setFakeUUID("player_server_61e12c79-09f6-4cd1-b752-6f7cd8d25ea5", "player_server_66612c79-09f6-4cd1-b752-6f7cd8d25ea5");
     return true;
 }
 

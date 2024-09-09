@@ -22,7 +22,7 @@ PlayerData* Database::loadPlayer(std::string id) {
     if(!res.has_value()) return nullptr;
     json j = json::parse(res.value());
     PlayerData* data = new PlayerData();
-    data->fakeUUID = j["fakeUUID"];
+    data->fakeUUID = j["fakeUUID"].get<std::string>();
     return data;
 }
 

@@ -18,8 +18,3 @@ using namespace std;
 using std::string;
 using std::to_string;
 using nlohmann::json;
-
-namespace OreShop {
-
-
-}
