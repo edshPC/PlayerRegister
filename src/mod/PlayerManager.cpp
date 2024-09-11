@@ -22,20 +22,27 @@ std::string PlayerManager::getFakeDBkey(const std::string& key) {
     }
     return key;
 }
-void PlayerManager::setFakeDBkey(Player* pl, string fake) {
-    auto real        = PlayerDataSystem::serverKey(LEVEL->getLevelStorage(), *pl);
+void PlayerManager::setFakeDBkey(Player* pl) {
+    if (!playersData.contains(pl)) return;
+    string fake      = playersData.at(pl)->fakeDBkey;
+    string real      = PlayerDataSystem::serverKey(LEVEL->getLevelStorage(), *pl);
     fakeDBkeys[real] = "player_server_" + fake;
 }
-void   PlayerManager::loadPlayer(Player* pl) {
-    if (auto data = Database::loadPlayer(getId(pl))) {
-        playersData[pl] = data;
-    }
-
-
+void PlayerManager::setPlayerData(Player* pl, PlayerData* data) {
+    playersData[pl] = data;
+    setFakeDBkey(pl);
+}
+void PlayerManager::loadPlayer(Player* pl) {
+    if (auto data = Database::loadPlayer(getId(pl))) setPlayerData(pl, data);
+    if (!pl->getXuid().empty()) return; // No need to auto-create account for xbox-authed players
+    AccountManager::createNewAccount(*pl);
+}
+void PlayerManager::unloadPlayer(Player* pl) {
+    playersData.erase(pl);
+    fakeDBkeys.erase(PlayerDataSystem::serverKey(LEVEL->getLevelStorage(), *pl));
 }
 string PlayerManager::getId(Player* pl) {
-    string xuid = pl->getXuid();
-    if (xuid.empty()) return pl->getConnectionRequest()->getDeviceId();
-    return xuid;
+    if (string xuid = pl->getXuid(); !xuid.empty()) return xuid;
+    return pl->getConnectionRequest()->getDeviceId();
 }
 } // namespace PlayerRegister

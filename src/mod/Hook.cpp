@@ -26,7 +26,7 @@ LL_TYPE_INSTANCE_HOOK(
 ) {
     auto res = origin(source, connectionRequest);
     auto sp  = res.tryUnwrap<ServerPlayer>();
-    if (sp.has_value()) PlayerManager::setFakeDBkey(sp, "77712c79-09f6-4cd1-b752-6f7cd8d25ea5");
+    if (sp.has_value()) PlayerManager::loadPlayer(sp);
     return res;
 }
 
@@ -42,7 +42,6 @@ LL_TYPE_INSTANCE_HOOK(
     ::DBHelpers::Category category
 ) {
     if (category != DBHelpers::Category::Player) return origin(key, buffer, category);
-    LOGGER.info("Loading db string {}", key);
     return origin(PlayerManager::getFakeDBkey(string(key)), buffer, category);
 }
 LL_TYPE_INSTANCE_HOOK(
@@ -57,7 +56,6 @@ LL_TYPE_INSTANCE_HOOK(
     ::DBHelpers::Category category
 ) {
     if (category != DBHelpers::Category::Player) return origin(key, data, category);
-    LOGGER.info("Saveing db string {}", key);
     return origin(PlayerManager::getFakeDBkey(key), data, category);
 }
 
