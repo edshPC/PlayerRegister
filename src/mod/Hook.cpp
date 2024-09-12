@@ -2,7 +2,7 @@
 
 #include "ll/api/memory/Hook.h"
 
-#include "PlayerManager.h"
+#include "manager/PlayerManager.h"
 #include "PlayerRegisterMod.h"
 
 #include <mc/certificates/Certificate.h>

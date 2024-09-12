@@ -11,6 +11,7 @@ class PlayerRegisterMod {
 
 public:
     static PlayerRegisterMod& getInstance();
+    static std::string tr(const std::string&);
 
     PlayerRegisterMod(ll::mod::NativeMod& self) : mSelf(self) {}
 

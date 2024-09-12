@@ -8,11 +8,12 @@
 #include "ll/api/service/Bedrock.h"
 #include "nlohmann/json.hpp"
 
-#include "PlayerRegisterMod.h"
+#include "mod/PlayerRegisterMod.h"
 
 #define NATIVE_MOD PlayerRegister::PlayerRegisterMod::getInstance().getSelf()
 #define LOGGER NATIVE_MOD.getLogger()
 #define LEVEL ll::service::getLevel()
+#define TR(key) PlayerRegister::PlayerRegisterMod::tr(#key)
 
 using namespace std;
 using std::string;
