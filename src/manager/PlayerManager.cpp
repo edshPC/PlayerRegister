@@ -46,6 +46,7 @@ string PlayerManager::getId(Player* pl) {
     return pl->getConnectionRequest()->getDeviceId();
 }
 void PlayerManager::reconnect(Player* pl) {
+    LEVEL->save();
     if (CONF.reconnect) {
         TransferPacket pkt{CONF.reconnect_ip, CONF.reconnect_port};
         pl->sendNetworkPacket(pkt);

@@ -78,13 +78,13 @@ void AccountManager::registerForm(Player& pl, const string& repeat_reason) {
         FORM_GET(name, string);
         FORM_GET(password, string);
         if (name.length() < 4 || password.length() < 4) registerForm(pl, TR(form.name_or_pass_too_short));
-        else if (!createAccount(pl, name, password)) registerForm(pl, TR(form.account_exists));
+        else if (!createAccount(pl, name, password, true)) registerForm(pl, TR(form.account_exists));
     });
 }
 void AccountManager::loginForm(Player& pl, const string& repeat_reason) {
     CustomForm form{TR(form.login.header)};
     if (!repeat_reason.empty()) form.appendLabel("§c" + repeat_reason + "§r\n\n");
-    form.appendInput("name", TR(form.login.name));
+    form.appendInput("name", TR(form.login.name), "", pl.getRealName());
     form.appendInput("password", TR(form.login.password));
     form.sendTo(pl, [](Player& pl, CustomFormResult const& res, FormCancelReason cancel) {
         if (cancel.has_value()) return;
