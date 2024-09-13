@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Global.h"
+#include <ll/api/command/runtime/ParamKind.h>
 
 namespace PlayerRegister {
 class Command {
@@ -12,6 +13,9 @@ public:
     };
     struct AccountParam {
         AccountAction action;
+    };
+    struct ResetPassParam {
+        CommandRawText account_name;
     };
 
     static bool init();
