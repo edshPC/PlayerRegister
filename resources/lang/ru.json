@@ -1,0 +1,29 @@
+{
+    "form.reg.header": "§bСоздать аккаунт",
+    "form.login.header": "§bВойти в аккаунт",
+    "form.log_or_reg.header": "§bВойти или зарегистрироваться",
+    "form.log_or_reg.description": "§aДобро пожаловать!\n§eВы не авторизованы в XBOX, поэтому вам нужно создать аккаунт\n",
+    "from.is_login": "§bВыберете это, если хотите войти в существующий аккаунт, а не создать новый",
+    "form.reg.name": "§eВыберете имя аккаунта.\nРекомендуется использовать ваш ник:",
+    "form.reg.password": "§eПридумайте пароль:",
+    "form.login.name": "§eВведите имя аккаунта:",
+    "form.login.password": "§eВведите пароль:",
+    "form.name_or_pass_too_short": "Имя или пароль слишком короткие!",
+    "form.incorrect_pass": "Неверный пароль, или такого аккаунта не существует!",
+    "form.account_exists": "Аккаунт с таким именем уже существует! Придумай другое имя",
+    "form.info.header": "§bИнформация об аккаунте",
+    "form.info.description": "§aВы в аккаунте: §b{}\n§eЕсли вы авторизованы в XBOX, иметь аккаунт не обязательно",
+    "form.info.change_password": "§l§cИзменить пароль",
+    "form.change_password.header": "§bИзменить пароль",
+    "form.change_password.password": "§eВведите новый пароль:",
+    "form.change_password.success": "§aПароль успешно изменен!",
+
+    "register.success": "§aАккаунт успешно создан и привязан!",
+    "player.reconnect": "§l§aВы успешно вошли в аккаунт!\n§r§bПожалуйста, перезайдите на сервер",
+
+    "command.not_a_player": "Команда доступна только для вызова игроком",
+    "command.account.description": "§eУправление аккаунтами",
+    "command.reset_password.description": "Сбросить пароль аккаунта",
+    "command.reset_password.not_found": "Аккаунт с данным именем не найден",
+    "command.reset_password.success": "Пароль аккаунта {0} был сброшен на {1}"
+}

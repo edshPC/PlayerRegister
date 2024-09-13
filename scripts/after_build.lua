@@ -95,12 +95,14 @@ function pack_mod(target,mod_define)
         local manifestfile = path.join(outputdir, "manifest.json")
         local oritargetfile = target:targetfile()
         local oripdbfile = path.join(path.directory(oritargetfile), path.basename(oritargetfile) .. ".pdb")
+        local resources = path.join(os.projectdir(), "resources")
 
         os.mkdir(outputdir)
         os.cp(oritargetfile, targetfile)
         if os.isfile(oripdbfile) then
             os.cp(oripdbfile, pdbfile)
         end
+        os.exec(string.format('xcopy /y /e "%s\\**" "%s"', resources, outputdir))
 
         formattedmanifest = string_formatter(manifest, mod_define)
         io.writefile(manifestfile,formattedmanifest)

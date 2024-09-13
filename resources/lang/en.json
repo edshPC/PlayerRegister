@@ -1,0 +1,29 @@
+{
+    "form.reg.header": "§bCreate account",
+    "form.login.header": "§bLogin to account",
+    "form.log_or_reg.header": "§bLogin or register",
+    "form.log_or_reg.description": "§aWelcome!\n§eYou are not logged into XBOX, so you need to create an account\n",
+    "from.is_login": "§bTick this if you want to sign in to an existing account rather than create a new one",
+    "form.reg.name": "§eSelect an account name.\nIt is recommended to use your nickname:",
+    "form.reg.password": "§eCreate a password:",
+    "form.login.name": "§eEnter your account name:",
+    "form.login.password": "§eEnter password:",
+    "form.name_or_pass_too_short": "The name or password is too short!",
+    "form.incorrect_pass": "Incorrect password or such account does not exist!",
+    "form.account_exists": "An account with this name already exists! Think of another name",
+    "form.info.header": "§bAccount info",
+    "form.info.description": "§aYou are logged in: §b{}\n§eIf you are logged into XBOX, you don't need to have an account",
+    "form.info.change_password": "§l§cChange password",
+    "form.change_password.header": "§bChange password",
+    "form.change_password.password": "§eEnter new password:",
+    "form.change_password.success": "§aPassword changed successfully!",
+
+    "register.success": "§aThe account has been created and linked successfully!",
+    "player.reconnect": "§l§aYou have successfully logged in!\n§r§bPlease re-login to the server",
+
+    "command.not_a_player": "The command is only available for player call",
+    "command.account.description": "§eAccount management",
+    "command.reset_password.description": "Reset account password",
+    "command.reset_password.not_found": "Account with this name not found",
+    "command.reset_password.success": "Account password {0} has been reset to {1}"
+}
