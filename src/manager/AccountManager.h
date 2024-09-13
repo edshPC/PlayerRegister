@@ -11,6 +11,8 @@ public:
     static bool loginAccount(Player& pl, const std::string& name, const std::string& password);
 
     static void loginOrRegisterForm(Player& pl, const string& repeat_reason = {}, bool is_login = false);
+    static void registerForm(Player& pl, const string& repeat_reason = {});
+    static void loginForm(Player& pl, const string& repeat_reason = {});
 
 };
 } // namespace PlayerRegister

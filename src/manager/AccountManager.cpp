@@ -47,13 +47,13 @@ bool AccountManager::loginAccount(Player& pl, const std::string& name, const std
 }
 
 void AccountManager::loginOrRegisterForm(Player& pl, const string& repeat_reason, bool is_login) {
-    CustomForm form{TR(form.log_or_reg.name)};
+    CustomForm form{TR(form.log_or_reg.header)};
     string     description = TR(form.log_or_reg.description);
-    if (!repeat_reason
-        .empty()) description.insert(0, repeat_reason + "\n\n");
-    form.appendToggle("is_login", description, is_login);
-    form.appendInput("name", TR(form.name), "name", pl.getRealName());
-    form.appendInput("password", TR(form.password), "password");
+    if (!repeat_reason.empty()) description.insert(0, "§c" + repeat_reason + "§r\n\n");
+    form.appendLabel(description);
+    form.appendToggle("is_login", TR(from.is_login), is_login);
+    form.appendInput("name", TR(form.reg.name), "", pl.getRealName());
+    form.appendInput("password", TR(form.reg.password));
     form.sendTo(pl, [](Player& pl, CustomFormResult const& res, FormCancelReason cancel) {
         if (cancel.has_value()) return loginOrRegisterForm(pl);
         FORM_GET(is_login, uint64);
@@ -66,6 +66,31 @@ void AccountManager::loginOrRegisterForm(Player& pl, const string& repeat_reason
         if (name.length() < 4 || password.length() < 4)
             loginOrRegisterForm(pl, TR(form.name_or_pass_too_short), is_login);
         else if (!createAccount(pl, name, password)) loginOrRegisterForm(pl, TR(form.account_exists), is_login);
+    });
+}
+void AccountManager::registerForm(Player& pl, const string& repeat_reason) {
+    CustomForm form{TR(form.reg.header)};
+    if (!repeat_reason.empty()) form.appendLabel("§c" + repeat_reason + "§r\n\n");
+    form.appendInput("name", TR(form.reg.name), "", pl.getRealName());
+    form.appendInput("password", TR(form.reg.password));
+    form.sendTo(pl, [](Player& pl, CustomFormResult const& res, FormCancelReason cancel) {
+        if (cancel.has_value()) return;
+        FORM_GET(name, string);
+        FORM_GET(password, string);
+        if (name.length() < 4 || password.length() < 4) registerForm(pl, TR(form.name_or_pass_too_short));
+        else if (!createAccount(pl, name, password)) registerForm(pl, TR(form.account_exists));
+    });
+}
+void AccountManager::loginForm(Player& pl, const string& repeat_reason) {
+    CustomForm form{TR(form.login.header)};
+    if (!repeat_reason.empty()) form.appendLabel("§c" + repeat_reason + "§r\n\n");
+    form.appendInput("name", TR(form.login.name));
+    form.appendInput("password", TR(form.login.password));
+    form.sendTo(pl, [](Player& pl, CustomFormResult const& res, FormCancelReason cancel) {
+        if (cancel.has_value()) return;
+        FORM_GET(name, string);
+        FORM_GET(password, string);
+        if (!loginAccount(pl, name, password)) loginForm(pl, TR(form.incorrect_pass));
     });
 }
 

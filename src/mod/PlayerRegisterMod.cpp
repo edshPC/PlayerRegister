@@ -1,5 +1,7 @@
 #include "mod/PlayerRegisterMod.h"
 
+#include "Command.h"
+
 #include <memory>
 
 #include "ll/api/i18n/I18n.h"
@@ -23,7 +25,7 @@ bool PlayerRegisterMod::load() {
     return Config::init() && Database::init() && setupHooks() && registerEvents();
 }
 
-bool PlayerRegisterMod::enable() { return true; }
+bool PlayerRegisterMod::enable() { return Command::init(); }
 
 bool PlayerRegisterMod::disable() { return true; }
 
