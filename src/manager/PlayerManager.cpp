@@ -1,9 +1,11 @@
 #include "PlayerManager.h"
 
 #include "Database.h"
+#include "mod/Config.h"
 
 #include <mc/entity/systems/common/PlayerDataSystem.h>
 #include <mc/network/ConnectionRequest.h>
+#include <mc/network/packet/TransferPacket.h>
 
 namespace PlayerRegister {
 
@@ -43,5 +45,11 @@ string PlayerManager::getId(Player* pl) {
     if (string xuid = pl->getXuid(); !xuid.empty()) return xuid;
     return pl->getConnectionRequest()->getDeviceId();
 }
-void PlayerManager::reconnect(Player* pl) { pl->disconnect(TR(player.reconnect)); }
+void PlayerManager::reconnect(Player* pl) {
+    if (CONF.reconnect) {
+        TransferPacket pkt{CONF.reconnect_ip, CONF.reconnect_port};
+        pl->sendNetworkPacket(pkt);
+    }
+    else pl->disconnect(TR(player.reconnect));
+}
 } // namespace PlayerRegister

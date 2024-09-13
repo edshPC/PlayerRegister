@@ -32,7 +32,7 @@ bool AccountManager::createAccount(Player& pl, const std::string& name, const st
     if (create_new) PlayerManager::reconnect(&pl);
     else {
         PlayerManager::setPlayerData(&pl, data);
-        pl.sendMessage(TR(form.register.success));
+        pl.sendMessage(TR(register.success));
     }
     return true;
 }
@@ -49,7 +49,8 @@ bool AccountManager::loginAccount(Player& pl, const std::string& name, const std
 void AccountManager::loginOrRegisterForm(Player& pl, const string& repeat_reason, bool is_login) {
     CustomForm form{TR(form.log_or_reg.name)};
     string     description = TR(form.log_or_reg.description);
-    if (!repeat_reason.empty()) description.insert(0, repeat_reason + "\n\n");
+    if (!repeat_reason
+        .empty()) description.insert(0, repeat_reason + "\n\n");
     form.appendToggle("is_login", description, is_login);
     form.appendInput("name", TR(form.name), "name", pl.getRealName());
     form.appendInput("password", TR(form.password), "password");
