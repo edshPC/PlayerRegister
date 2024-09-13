@@ -20,7 +20,7 @@ std::string        PlayerRegisterMod::tr(const std::string& key) { return std::s
 
 bool PlayerRegisterMod::load() {
     locale = std::make_unique<ll::i18n::MultiFileI18N>(ll::i18n::MultiFileI18N(NATIVE_MOD.getLangDir()));
-    return Config::init() && Database::init() && setupHooks() && registerEvents();
+    return Config::init() && Database::init() && setupHooks();
 }
 
 bool PlayerRegisterMod::enable() { return Command::init(); }

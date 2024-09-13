@@ -18,7 +18,7 @@
 namespace PlayerRegister {
 LL_TYPE_INSTANCE_HOOK(
     CreateNewPlayerHook,
-    HookPriority::Normal,
+    HookPriority::High,
     ServerNetworkHandler,
     &ServerNetworkHandler::createNewPlayer,
     OwnerPtr<EntityContext>,
@@ -29,6 +29,18 @@ LL_TYPE_INSTANCE_HOOK(
     auto sp  = res.tryUnwrap<ServerPlayer>();
     if (sp.has_value()) PlayerManager::loadPlayer(sp);
     return res;
+}
+LL_TYPE_INSTANCE_HOOK(
+    OnPlayerLeftHook,
+    HookPriority::Low,
+    ServerNetworkHandler,
+    &ServerNetworkHandler::_onPlayerLeft,
+    void,
+    ServerPlayer* player,
+    bool          skipMessage
+) {
+    origin(player, skipMessage);
+    PlayerManager::unloadPlayer(player);
 }
 
 LL_TYPE_INSTANCE_HOOK(
@@ -67,6 +79,7 @@ LL_TYPE_INSTANCE_HOOK(FakeGetUuidHook, HookPriority::Normal, Player, &Player::ge
 
 bool setupHooks() {
     CreateNewPlayerHook::hook();
+    OnPlayerLeftHook::hook();
     DBStorageFakeLoadHook::hook();
     DBStorageFakeSaveHook::hook();
     if (CONF.fake_ll_uuid) FakeGetUuidHook::hook();
