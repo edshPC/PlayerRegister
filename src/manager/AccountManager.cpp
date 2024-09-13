@@ -23,12 +23,13 @@ bool AccountManager::createAccount(Player& pl, const std::string& name, const st
         data.fakeUUID  = mce::UUID::random();
         data.fakeDBkey = "player_server_" + mce::UUID::random().asString();
     } else {
-        data.fakeUUID  = pl.getUuid();
-        data.fakeDBkey = PlayerManager::getFakeDBkey(PlayerDataSystem::serverKey(LEVEL->getLevelStorage(), pl));
+        data.fakeUUID  = PlayerManager::getRealUUID(&pl);
+        data.fakeDBkey = PlayerDataSystem::serverKey(LEVEL->getLevelStorage(), pl);
     }
     data.valid = true;
     Database::storeAsAccount(data);
     Database::storeAsPlayer(data);
+    LOGGER.info("{} created an account {}", pl.getRealName(), data.name);
     if (create_new) PlayerManager::reconnect(&pl);
     else {
         PlayerManager::setPlayerData(&pl, data);
@@ -42,15 +43,15 @@ bool AccountManager::loginAccount(Player& pl, const std::string& name, const std
     // account not exists or incorrect pass
     if (!data.valid || data.password != SHA256::digest_str(password)) return false;
     Database::storeAsPlayer(data);
+    LOGGER.info("{} logged in account {}", pl.getRealName(), data.name);
     PlayerManager::reconnect(&pl);
     return true;
 }
 
 void AccountManager::loginOrRegisterForm(Player& pl, const string& repeat_reason, bool is_login) {
     CustomForm form{TR(form.log_or_reg.header)};
-    string     description = TR(form.log_or_reg.description);
-    if (!repeat_reason.empty()) description.insert(0, "§c" + repeat_reason + "§r\n\n");
-    form.appendLabel(description);
+    if (!repeat_reason.empty()) form.appendLabel("§c" + repeat_reason + "§r\n\n");
+    form.appendLabel(TR(form.log_or_reg.description));
     form.appendToggle("is_login", TR(from.is_login), is_login);
     form.appendInput("name", TR(form.reg.name), "", pl.getRealName());
     form.appendInput("password", TR(form.reg.password));

@@ -10,7 +10,8 @@ Config config;
 
 bool Config::init() {
     try {
-        loadConfig(config, NATIVE_MOD.getConfigDir() / "config.json");
+         if(!loadConfig(config, NATIVE_MOD.getConfigDir() / "config.json"))
+             saveConfig(config, NATIVE_MOD.getConfigDir() / "config.json");
     } catch (...) {
         return false;
     }

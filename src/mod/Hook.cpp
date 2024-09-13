@@ -69,7 +69,7 @@ bool setupHooks() {
     CreateNewPlayerHook::hook();
     DBStorageFakeLoadHook::hook();
     DBStorageFakeSaveHook::hook();
-    if(CONF.fake_ll_uuid) FakeGetUuidHook::hook();
+    if (CONF.fake_ll_uuid) FakeGetUuidHook::hook();
     return true;
 }
 
