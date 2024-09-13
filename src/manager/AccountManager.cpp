@@ -117,8 +117,8 @@ void AccountManager::loginForm(Player& pl, const string& repeat_reason) {
     });
 }
 void AccountManager::infoForm(Player& pl) {
-    auto&      data = PlayerManager::getPlayerData(&pl);
-    string description = std::vformat(TR(form.info.description), std::make_format_args(data.name));
+    auto&      data        = PlayerManager::getPlayerData(&pl);
+    string     description = std::vformat(TR(form.info.description), std::make_format_args(data.name));
     SimpleForm form{TR(form.info.header), description};
     if (data.valid)
         form.appendButton(TR(form.info.change_password), [data](Player& pl) {
