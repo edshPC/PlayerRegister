@@ -3,6 +3,7 @@
 #include "Database.h"
 #include "ll/api/form/CustomForm.h"
 #include "ll/api/form/FormBase.h"
+#include "ll/api/form/SimpleForm.h"
 
 #include <mc/entity/systems/common/PlayerDataSystem.h>
 #include <util/SHA256.h>
@@ -13,6 +14,11 @@
 using namespace ll::form;
 
 namespace PlayerRegister {
+
+static void trim_string(std::string& s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+}
 
 bool AccountManager::createAccount(Player& pl, const std::string& name, const std::string& password, bool create_new) {
     PlayerData data(PlayerManager::getId(&pl), name);
@@ -47,6 +53,14 @@ bool AccountManager::loginAccount(Player& pl, const std::string& name, const std
     PlayerManager::reconnect(&pl);
     return true;
 }
+bool AccountManager::changePassword(const std::string& name, const std::string& new_password) {
+    PlayerData data("", name);
+    Database::loadAsAccount(data);
+    if (!data.valid) return false;
+    data.password = SHA256::digest_str(new_password);
+    Database::storeAsAccount(data);
+    return true;
+}
 
 void AccountManager::loginOrRegisterForm(Player& pl, const string& repeat_reason, bool is_login) {
     CustomForm form{TR(form.log_or_reg.header)};
@@ -60,6 +74,8 @@ void AccountManager::loginOrRegisterForm(Player& pl, const string& repeat_reason
         FORM_GET(is_login, uint64);
         FORM_GET(name, string);
         FORM_GET(password, string);
+        trim_string(name);
+        trim_string(password);
         if (is_login) {
             if (!loginAccount(pl, name, password)) loginOrRegisterForm(pl, TR(form.incorrect_pass), is_login);
             return;
@@ -78,6 +94,8 @@ void AccountManager::registerForm(Player& pl, const string& repeat_reason) {
         if (cancel.has_value()) return;
         FORM_GET(name, string);
         FORM_GET(password, string);
+        trim_string(name);
+        trim_string(password);
         PlayerData test(PlayerManager::getId(&pl));
         Database::loadAsPlayer(test);
         if (name.length() < 4 || password.length() < 4) registerForm(pl, TR(form.name_or_pass_too_short));
@@ -93,8 +111,27 @@ void AccountManager::loginForm(Player& pl, const string& repeat_reason) {
         if (cancel.has_value()) return;
         FORM_GET(name, string);
         FORM_GET(password, string);
+        trim_string(name);
+        trim_string(password);
         if (!loginAccount(pl, name, password)) loginForm(pl, TR(form.incorrect_pass));
     });
+}
+void AccountManager::infoForm(Player& pl) {
+    auto&      data = PlayerManager::getPlayerData(&pl);
+    SimpleForm form{TR(form.info.header), std::format(TR(form.info.description), data.name)};
+    if (data.valid)
+        form.appendButton(TR(form.info.change_password), [data](Player& pl) {
+            CustomForm form{TR(form.change_password.header)};
+            form.appendInput("password", TR(form.change_password.password));
+            form.sendTo(pl, [data](Player& pl, CustomFormResult const& res, FormCancelReason cancel) {
+                if (cancel.has_value()) return;
+                FORM_GET(password, string);
+                trim_string(password);
+                if (password.length() < 4) pl.sendMessage("§c" + TR(form.name_or_pass_too_short));
+                else if (changePassword(data.name, password)) pl.sendMessage(TR(form.change_password.success));
+            });
+        });
+    form.sendTo(pl);
 }
 
 } // namespace PlayerRegister

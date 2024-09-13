@@ -24,6 +24,9 @@ EXECUTE_CMD(Account) {
     case Command::login:
         AccountManager::loginForm(*pl);
         break;
+    case Command::info:
+        AccountManager::infoForm(*pl);
+        break;
     }
     out.success();
 }
@@ -33,7 +36,6 @@ bool Command::init() {
     auto& registrar = CommandRegistrar::getInstance();
 
     registrar.tryRegisterEnum<AccountAction>();
-
     auto& cmd = registrar.getOrCreateCommand("account", TR(command.description));
     cmd.overload<AccountParam>().required("action").execute(&executeAccount);
 

@@ -8,6 +8,7 @@ public:
     enum AccountAction {
         create,
         login,
+        info,
     };
     struct AccountParam {
         AccountAction action;

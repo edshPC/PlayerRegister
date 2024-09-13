@@ -30,6 +30,7 @@ public:
     static void loadPlayer(Player* pl);
     static void unloadPlayer(Player* pl);
 
+    static PlayerData& getPlayerData(Player* pl);
     static string getId(Player* pl);
     static void reconnect(Player* pl);
 };

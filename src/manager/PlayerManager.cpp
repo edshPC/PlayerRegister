@@ -4,10 +4,10 @@
 #include "mod/Config.h"
 
 #include <future>
+#include <ll/api/schedule/Scheduler.h>
 #include <mc/entity/systems/common/PlayerDataSystem.h>
 #include <mc/network/ConnectionRequest.h>
 #include <mc/network/packet/TransferPacket.h>
-#include <ll/api/schedule/Scheduler.h>
 
 namespace PlayerRegister {
 
@@ -15,6 +15,7 @@ unordered_map<Player*, PlayerData>      playersData;
 unordered_map<std::string, std::string> fakeDBkeys; // player_server_{uuid}
 
 ll::schedule::ServerTimeScheduler scheduler;
+PlayerData emptyData{"null", "[Not registered]"};
 
 const mce::UUID& PlayerManager::getRealUUID(Player* pl) { return pl->getUserEntityIdentifier().mClientUUID; }
 const mce::UUID& PlayerManager::getFakeUUID(Player* pl) {
@@ -33,7 +34,6 @@ void PlayerManager::setFakeDBkey(Player* pl) {
 void PlayerManager::setPlayerData(Player* pl, PlayerData& data) {
     playersData[pl] = data;
     setFakeDBkey(pl);
-    LOGGER.info(data.fakeDBkey);
 }
 void PlayerManager::loadPlayer(Player* pl) {
     PlayerData data{getId(pl)};
@@ -55,6 +55,10 @@ void PlayerManager::unloadPlayer(Player* pl) {
         playersData.erase(pl);
         fakeDBkeys.erase(PlayerDataSystem::serverKey(LEVEL->getLevelStorage(), *pl));
     });
+}
+PlayerData& PlayerManager::getPlayerData(Player* pl) {
+    if (playersData.contains(pl)) return playersData.at(pl);
+    return emptyData;
 }
 string PlayerManager::getId(Player* pl) {
     if (string xuid = pl->getXuid(); !xuid.empty()) return xuid;
