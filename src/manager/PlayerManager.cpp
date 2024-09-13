@@ -33,7 +33,14 @@ void PlayerManager::setPlayerData(Player* pl, PlayerData& data) {
 void PlayerManager::loadPlayer(Player* pl) {
     PlayerData data{getId(pl)};
     Database::loadAsPlayer(data);
-    if (data.valid) return setPlayerData(pl, data);
+    if (data.valid) {
+        for (auto& entry : playersData)
+            if (entry.second.name == data.name) {
+                entry.first->disconnect(TR(player.join_from_other));
+                break;
+            }
+        return setPlayerData(pl, data);
+    }
     if (!pl->getXuid().empty()) return; // No need to auto-create account for xbox-authed players
     AccountManager::loginOrRegisterForm(*pl);
 }
@@ -50,7 +57,6 @@ void PlayerManager::reconnect(Player* pl) {
     if (CONF.reconnect) {
         TransferPacket pkt{CONF.reconnect_ip, CONF.reconnect_port};
         pl->sendNetworkPacket(pkt);
-    }
-    else pl->disconnect(TR(player.reconnect));
+    } else pl->disconnect(TR(player.reconnect));
 }
 } // namespace PlayerRegister

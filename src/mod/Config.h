@@ -7,11 +7,11 @@
 namespace PlayerRegister {
 class Config {
 public:
-    int version = 1;
-
+    int version = 2;
     bool reconnect = false;
     string reconnect_ip = "127.0.0.1";
     int reconnect_port = 19132;
+    bool fake_ll_uuid = true;
 
     static bool init();
     static const Config& getInstance();

@@ -77,8 +77,10 @@ void AccountManager::registerForm(Player& pl, const string& repeat_reason) {
         if (cancel.has_value()) return;
         FORM_GET(name, string);
         FORM_GET(password, string);
+        PlayerData test(PlayerManager::getId(&pl));
+        Database::loadAsPlayer(test);
         if (name.length() < 4 || password.length() < 4) registerForm(pl, TR(form.name_or_pass_too_short));
-        else if (!createAccount(pl, name, password, true)) registerForm(pl, TR(form.account_exists));
+        else if (!createAccount(pl, name, password, test.valid)) registerForm(pl, TR(form.account_exists));
     });
 }
 void AccountManager::loginForm(Player& pl, const string& repeat_reason) {

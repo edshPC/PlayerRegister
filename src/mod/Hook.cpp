@@ -2,8 +2,9 @@
 
 #include "ll/api/memory/Hook.h"
 
-#include "manager/PlayerManager.h"
+#include "Config.h"
 #include "PlayerRegisterMod.h"
+#include "manager/PlayerManager.h"
 
 #include <mc/certificates/Certificate.h>
 #include <mc/entity/EntityContext.h>
@@ -68,8 +69,7 @@ bool setupHooks() {
     CreateNewPlayerHook::hook();
     DBStorageFakeLoadHook::hook();
     DBStorageFakeSaveHook::hook();
-
-    FakeGetUuidHook::hook();
+    if(CONF.fake_ll_uuid) FakeGetUuidHook::hook();
     return true;
 }
 
