@@ -25,7 +25,9 @@ Passwords are SHA256-hashed
 ### Config
 
 ```json5
-{
+{   
+    // sets maximum number of accounts for one player
+    "max_accounts": 3,
     // [recommended] set this to true to auto-reconnect players to the following ip&port
     // instead of kicking it when they switch accounts
     "reconnect": false, 
