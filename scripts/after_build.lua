@@ -108,7 +108,7 @@ function pack_mod(target,mod_define)
         io.writefile(manifestfile,formattedmanifest)
         cprint("${bright green}[mod Packer]: ${reset}mod already generated to " .. outputdir)
 
-        if os.host() == "windows" then
+        if has_config("copy") then
             os.exec(string.format('xcopy /y /e "%s" "%s"', outputdir, "D:\\mcpe\\bedrock-server-1.21.3-0.13.5\\plugins\\PlayerRegister"))
             cprint("Mod copied to server")
         end

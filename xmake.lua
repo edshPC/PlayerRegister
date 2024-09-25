@@ -47,6 +47,8 @@ target("PlayerRegister") -- Change this to your mod name.
             modFile = path.filename(target:targetfile()),
             modVersion = major .. "." .. minor .. "." .. patch,
         }
-        
         mod_packer.pack_mod(target,mod_define)
     end)
+
+option("copy")
+    set_default(false)
