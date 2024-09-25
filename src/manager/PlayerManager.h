@@ -10,6 +10,7 @@ struct PlayerData {
     string id;
     string name;
     string password;
+    int accounts = 0;
 
     mce::UUID fakeUUID;
     std::string fakeDBkey;

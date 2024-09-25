@@ -9,7 +9,7 @@
     "form.login.name": "§eEnter your account name:",
     "form.login.password": "§eEnter password:",
     "form.name_or_pass_too_short": "The name or password is too short!",
-    "form.incorrect_pass": "Incorrect password or such account does not exist!",
+    "form.incorrect_pass": "Incorrect password or such account does not exist! If you forgot your password, contact the admin",
     "form.account_exists": "An account with this name already exists! Think of another name",
     "form.info.header": "§bAccount info",
     "form.info.description": "§aYou are logged in: §b{}\n§eIf you are logged into XBOX, you don't need to have an account",
@@ -18,6 +18,7 @@
     "form.change_password.password": "§eEnter new password:",
     "form.change_password.success": "§aPassword changed successfully!",
 
+    "register.max_accounts": "You have already created maximum number of accounts",
     "register.success": "§aThe account has been created and linked successfully!",
     "player.reconnect": "§l§aYou have successfully logged in!\n§r§bPlease re-login to the server",
 

@@ -15,12 +15,14 @@ bool Database::init() {
 static void serializeData(json& j, const PlayerData& data) {
     j["name"]      = data.name;
     j["password"]  = data.password;
+    j["accounts"]  = data.accounts;
     j["fakeUUID"]  = data.fakeUUID.asString();
     j["fakeDBkey"] = data.fakeDBkey;
 }
 static void deserializeData(const json& j, PlayerData& data) {
     data.name      = j["name"].get<std::string>();
     data.password  = j["password"].get<std::string>();
+    data.accounts  = j["accounts"].get<int>();
     data.fakeUUID  = j["fakeUUID"].get<std::string>();
     data.fakeDBkey = j["fakeDBkey"].get<std::string>();
 }

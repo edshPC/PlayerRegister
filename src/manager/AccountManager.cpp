@@ -4,6 +4,7 @@
 #include "ll/api/form/CustomForm.h"
 #include "ll/api/form/FormBase.h"
 #include "ll/api/form/SimpleForm.h"
+#include "mod/Config.h"
 
 #include <mc/entity/systems/common/PlayerDataSystem.h>
 #include <util/SHA256.h>
@@ -24,6 +25,11 @@ bool AccountManager::createAccount(Player& pl, const std::string& name, const st
     PlayerData data(PlayerManager::getId(&pl), name);
     Database::loadAsAccount(data);
     if (data.valid) return false; // account exists
+    data.accounts = PlayerManager::getPlayerData(&pl).accounts + 1;
+    if (data.accounts > CONF.max_accounts) { // excedeed max number of accounts
+        pl.sendMessage(std::format("§c{}: {}", TR(register.max_accounts), CONF.max_accounts));
+        return true;
+    }
     data.password = SHA256::digest_str(password);
     if (create_new) {
         data.fakeUUID  = mce::UUID::random();
