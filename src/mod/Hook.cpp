@@ -77,12 +77,23 @@ LL_TYPE_INSTANCE_HOOK(FakeGetUuidHook, HookPriority::Normal, Player, &Player::ge
     return PlayerManager::getFakeUUID(this);
 }
 
+LL_TYPE_INSTANCE_HOOK(FakeGetPlayerHook, HookPriority::Normal, Level, &Level::getPlayer, Player*, mce::UUID const& uuid) {
+    if (Player* ori = origin(uuid)) return ori;
+    for (auto& en : PlayerManager::getAllData()) {
+        if (en.second.fakeUUID == uuid) return en.first;
+    }
+    return nullptr;
+}
+
 bool setupHooks() {
     CreateNewPlayerHook::hook();
     OnPlayerLeftHook::hook();
     DBStorageFakeLoadHook::hook();
     DBStorageFakeSaveHook::hook();
-    if (CONF.fake_ll_uuid) FakeGetUuidHook::hook();
+    if (CONF.fake_ll_uuid) {
+        FakeGetUuidHook::hook();
+        FakeGetPlayerHook::hook();
+    }
     return true;
 }
 

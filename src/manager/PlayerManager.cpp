@@ -55,6 +55,9 @@ PlayerData& PlayerManager::getPlayerData(Player* pl) {
     if (playersData.contains(pl)) return playersData.at(pl);
     return emptyData;
 }
+const unordered_map<Player*, PlayerData>& PlayerManager::getAllData() {
+    return playersData;
+}
 string PlayerManager::getId(Player* pl) {
     if (string xuid = pl->getXuid(); !xuid.empty()) return xuid;
     return pl->getConnectionRequest()->getDeviceId();

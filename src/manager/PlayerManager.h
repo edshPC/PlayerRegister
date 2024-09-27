@@ -32,6 +32,7 @@ public:
     static void unloadPlayer(Player* pl);
 
     static PlayerData& getPlayerData(Player* pl);
+    static const unordered_map<Player*, PlayerData>& getAllData();
     static string getId(Player* pl);
     static void reconnect(Player* pl);
 };
