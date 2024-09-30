@@ -19,8 +19,9 @@ PlayerRegisterMod& PlayerRegisterMod::getInstance() { return *instance; }
 std::string        PlayerRegisterMod::tr(const std::string& key) { return std::string(locale->get(key)); }
 
 bool PlayerRegisterMod::load() {
-    locale = std::make_unique<ll::i18n::MultiFileI18N>(ll::i18n::MultiFileI18N(NATIVE_MOD.getLangDir()));
-    return Config::init() && Database::init() && setupHooks();
+    if(!Config::init()) return false;
+    locale = std::make_unique<ll::i18n::MultiFileI18N>(ll::i18n::MultiFileI18N(NATIVE_MOD.getLangDir(), CONF.lang));
+    return Database::init() && setupHooks();
 }
 
 bool PlayerRegisterMod::enable() { return Command::init(); }

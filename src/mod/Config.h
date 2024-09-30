@@ -7,7 +7,8 @@
 namespace PlayerRegister {
 class Config {
 public:
-    int version = 3;
+    int version = 4;
+    string lang = "en_US";
     int max_accounts = 3;
     bool reconnect = false;
     string reconnect_ip = "127.0.0.1";
