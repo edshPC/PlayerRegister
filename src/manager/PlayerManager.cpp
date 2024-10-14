@@ -30,7 +30,7 @@ void PlayerManager::setFakeDBkey(Player* pl) {
 }
 void PlayerManager::setPlayerData(Player* pl, PlayerData& data) {
     playersData[pl] = data;
-    setFakeDBkey(pl);
+    if(!data.fakeDBkey.empty()) setFakeDBkey(pl);
 }
 void PlayerManager::loadPlayer(Player* pl) {
     PlayerData data{getId(pl)};
@@ -41,11 +41,10 @@ void PlayerManager::loadPlayer(Player* pl) {
                 entry.first->disconnect(TR(player.join_from_other));
                 break;
             }
-
         return setPlayerData(pl, data);
     }
-    if (!pl->getXuid().empty()) return; // No need to auto-create account for xbox-authed players
-    AccountManager::loginOrRegisterForm(*pl);
+    // No xbox-authed players should register accounts
+    if (pl->getXuid().empty()) AccountManager::loginOrRegisterForm(*pl);
 }
 void PlayerManager::unloadPlayer(Player* pl) {
     playersData.erase(pl);

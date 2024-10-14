@@ -35,7 +35,7 @@ bool AccountManager::createAccount(Player& pl, const std::string& name, const st
         data.fakeUUID  = mce::UUID::random();
         data.fakeDBkey = "player_server_" + mce::UUID::random().asString();
     } else {
-        data.fakeUUID  = PlayerManager::getRealUUID(&pl);
+        data.fakeUUID  = PlayerManager::getFakeUUID(&pl);
         data.fakeDBkey = PlayerDataSystem::serverKey(LEVEL->getLevelStorage(), pl);
     }
     data.valid = true;
@@ -60,7 +60,7 @@ bool AccountManager::loginAccount(Player& pl, const std::string& name, const std
     return true;
 }
 bool AccountManager::changePassword(const std::string& name, const std::string& new_password) {
-    PlayerData data("", name);
+    PlayerData data{.name = name};
     Database::loadAsAccount(data);
     if (!data.valid) return false;
     data.password = SHA256::digest_str(new_password);
@@ -126,7 +126,7 @@ void AccountManager::infoForm(Player& pl) {
     auto&      data        = PlayerManager::getPlayerData(&pl);
     string     description = std::vformat(TR(form.info.description), std::make_format_args(data.name));
     SimpleForm form{TR(form.info.header), description};
-    if (data.valid)
+    if (data.valid && data.accounts)
         form.appendButton(TR(form.info.change_password), [data](Player& pl) {
             CustomForm form{TR(form.change_password.header)};
             form.appendInput("password", TR(form.change_password.password));
