@@ -25,16 +25,20 @@ Passwords are SHA256-hashed
 ### Config
 
 ```json5
-{   
+{
+    // language of mod (only "en" and "ru" supported now)
+    "lang": "en_US",
     // sets maximum number of accounts for one player
     "max_accounts": 3,
     // [recommended] set this to true to auto-reconnect players to the following ip&port
-    // instead of kicking it when they switch accounts
+    // instead of kicking them when they switch accounts
     "reconnect": false, 
     "reconnect_ip": "127.0.0.1",
     "reconnect_port": 19132,
-    // if true, levi's uuid will link player's accounts to link with other mods
-    "fake_ll_uuid": true
+    // if true, levi's getUuid will link player's accounts to support other mods data
+    "fake_uuid": true,
+    // if true, fake XUID will be created for new accounts (including non-authorized players)
+    "fake_xuid": true
 }
 ```
 
