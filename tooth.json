@@ -14,7 +14,7 @@
     },
     "asset_url": "https://github.com/edshPC/PlayerRegister/releases/download/v0.1.4/PlayerRegister-windows-x64.zip",
     "prerequisites": {
-        "github.com/LiteLDev/LeviLamina": ">=0.13.4 <0.14.0"
+        "github.com/LiteLDev/LeviLamina": "1.0.x"
     },
     "files": {
         "place": [

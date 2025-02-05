@@ -7,8 +7,8 @@
 #include "manager/PlayerManager.h"
 
 #include <mc/certificates/Certificate.h>
-#include <mc/entity/EntityContext.h>
-#include <mc/entity/gamerefs_entity/EntityRefTraits.h>
+#include <mc/deps/ecs/gamerefs_entity/EntityContext.h>
+#include <mc/deps/ecs/gamerefs_entity/EntityRefTraits.h>
 #include <mc/network/ConnectionRequest.h>
 #include <mc/network/ServerNetworkHandler.h>
 #include <mc/network/packet/LoginPacket.h>
@@ -20,7 +20,7 @@ LL_TYPE_INSTANCE_HOOK(
     CreateNewPlayerHook,
     HookPriority::High,
     ServerNetworkHandler,
-    &ServerNetworkHandler::createNewPlayer,
+    &createNewPlayer,
     OwnerPtr<EntityContext>,
     class NetworkIdentifier const& source,
     class ConnectionRequest const& connectionRequest
@@ -34,7 +34,7 @@ LL_TYPE_INSTANCE_HOOK(
     OnPlayerLeftHook,
     HookPriority::Low,
     ServerNetworkHandler,
-    &ServerNetworkHandler::_onPlayerLeft,
+    &_onPlayerLeft,
     void,
     ServerPlayer* player,
     bool          skipMessage
@@ -47,8 +47,7 @@ LL_TYPE_INSTANCE_HOOK(
     DBStorageFakeLoadHook,
     HookPriority::Normal,
     DBStorage,
-    "?loadData@DBStorage@@UEBA_NV?$basic_string_view@DU?$char_traits@D@std@@@std@@AEAV?$basic_string@DU?$char_traits@D@"
-    "std@@V?$allocator@D@2@@3@W4Category@DBHelpers@@@Z",
+    &$loadData,
     bool,
     std::string_view      key,
     std::string&          buffer,
@@ -61,15 +60,14 @@ LL_TYPE_INSTANCE_HOOK(
     DBStorageFakeSaveHook,
     HookPriority::Normal,
     DBStorage,
-    "?saveData@DBStorage@@UEAA?AV?$shared_ptr@V?$IAsyncResult@X@Threading@Bedrock@@@std@@AEBV?$basic_string@DU?$char_"
-    "traits@D@std@@V?$allocator@D@2@@3@$$QEAV43@W4Category@DBHelpers@@@Z",
+    &$saveData,
     std::shared_ptr<Bedrock::Threading::IAsyncResult<void>>,
     std::string const&    key,
-    std::string&          data,
+    std::string&&         data,
     ::DBHelpers::Category category
 ) {
-    if (category != DBHelpers::Category::Player) return origin(key, data, category);
-    return origin(PlayerManager::getFakeDBkey(key), data, category);
+    if (category != DBHelpers::Category::Player) return origin(key, std::move(data), category);
+    return origin(PlayerManager::getFakeDBkey(key), std::move(data), category);
 }
 
 // LeviLamina method hook to support other mods
@@ -77,7 +75,14 @@ LL_TYPE_INSTANCE_HOOK(FakeGetUuidHook, HookPriority::Normal, Player, &Player::ge
     return PlayerManager::getFakeUUID(this);
 }
 
-LL_TYPE_INSTANCE_HOOK(FakeGetPlayerHook, HookPriority::Normal, Level, &Level::getPlayer, Player*, mce::UUID const& uuid) {
+LL_TYPE_INSTANCE_HOOK(
+    FakeGetPlayerHook,
+    HookPriority::Normal,
+    Level,
+    &$getPlayer,
+    Player*,
+    mce::UUID const& uuid
+) {
     if (Player* ori = origin(uuid)) return ori;
     for (auto& en : PlayerManager::getAllData()) {
         if (en.second.fakeUUID == uuid) return en.first;

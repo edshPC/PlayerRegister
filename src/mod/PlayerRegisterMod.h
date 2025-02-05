@@ -13,7 +13,7 @@ public:
     static PlayerRegisterMod& getInstance();
     static std::string tr(const std::string&);
 
-    PlayerRegisterMod(ll::mod::NativeMod& self) : mSelf(self) {}
+    PlayerRegisterMod() : mSelf(*ll::mod::NativeMod::current()) {}
 
     [[nodiscard]] ll::mod::NativeMod& getSelf() const { return mSelf; }
 

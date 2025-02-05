@@ -4,7 +4,8 @@
 
 #include <ll/api/command/CommandHandle.h>
 #include <ll/api/command/CommandRegistrar.h>
-#include <mc/world/level/Command.h>
+#include <ll/api/command/Command.h>
+#include <mc/server/commands/CommandOutput.h>
 
 #define EXECUTE_CMD(name)                                                                                              \
     void execute##name(const CommandOrigin& ori, CommandOutput& out, const Command::##name##Param& param)
