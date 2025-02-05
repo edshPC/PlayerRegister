@@ -25,10 +25,9 @@ std::string PlayerRegisterMod::tr(const std::string& key) {
 
 bool PlayerRegisterMod::load() {
     if (!Config::init()) return false;
-    locale   = std::make_unique<ll::i18n::I18n>();
-    auto err = locale->load(NATIVE_MOD.getLangDir());
-    if (err) return false;
-    return Database::init() && setupHooks();
+    locale = std::make_unique<ll::i18n::I18n>();
+    auto exp = locale->load(NATIVE_MOD.getLangDir());
+    return exp.has_value() && Database::init() && setupHooks();
 }
 
 bool PlayerRegisterMod::enable() { return Command::init(); }

@@ -17,6 +17,7 @@ static void serializeData(json& j, const PlayerData& data) {
     j["password"]  = data.password;
     j["accounts"]  = data.accounts;
     j["fakeUUID"]  = data.fakeUUID.asString();
+    j["fakeXUID"]  = data.fakeXUID;
     j["fakeDBkey"] = data.fakeDBkey;
 }
 static void deserializeData(const json& j, PlayerData& data) {
@@ -24,6 +25,7 @@ static void deserializeData(const json& j, PlayerData& data) {
     data.password  = j["password"].get<std::string>();
     data.accounts  = j["accounts"].get<int>();
     data.fakeUUID  = j["fakeUUID"].get<std::string>();
+    data.fakeXUID  = j["fakeXUID"].get<std::string>();
     data.fakeDBkey = j["fakeDBkey"].get<std::string>();
 }
 

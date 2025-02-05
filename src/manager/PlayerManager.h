@@ -13,7 +13,8 @@ struct PlayerData {
     int accounts = 0;
 
     mce::UUID fakeUUID;
-    std::string fakeDBkey;
+    string fakeXUID;
+    string fakeDBkey;
 
     bool valid = false;
 };
@@ -31,7 +32,7 @@ public:
     static void loadPlayer(Player* pl);
     static void unloadPlayer(Player* pl);
 
-    static PlayerData& getPlayerData(Player* pl);
+    static const PlayerData& getPlayerData(Player* pl);
     static const unordered_map<Player*, PlayerData>& getAllData();
     static string getId(Player* pl);
     static void reconnect(Player* pl);

@@ -4,6 +4,7 @@
 #include "ll/api/form/CustomForm.h"
 #include "ll/api/form/FormBase.h"
 #include "ll/api/form/SimpleForm.h"
+#include "ll/api/utils/RandomUtils.h"
 #include "mod/Config.h"
 
 #include <mc/world/level/storage/PlayerDataSystem.h>
@@ -36,8 +37,10 @@ bool AccountManager::createAccount(Player& pl, const std::string& name, const st
         data.fakeDBkey = "player_server_" + mce::UUID::random().asString();
     } else {
         data.fakeUUID  = PlayerManager::getFakeUUID(&pl);
+        data.fakeXUID  = pl.getXuid();
         data.fakeDBkey = PlayerDataSystem::serverKey(LEVEL->getLevelStorage(), pl);
     }
+    if (data.fakeXUID.empty()) data.fakeXUID = std::to_string(ll::random_utils::rand<int64>(INT64_MIN, -1));
     data.valid = true;
     Database::storeAsAccount(data);
     Database::storeAsPlayer(data);

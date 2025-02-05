@@ -35,10 +35,8 @@ target("PlayerRegister") -- Change this to your mod name.
     set_symbols("debug")
     add_files("src/**.cpp")
     add_includedirs("src")
-    -- if is_config("target_type", "server") then
-    --     add_includedirs("src-server")
-    --     add_files("src-server/**.cpp")
-    -- else
-    --     add_includedirs("src-client")
-    --     add_files("src-client/**.cpp")
-    -- end
+    after_build(function(target)
+        local resourcesPath = path.join(os.projectdir(), "resources/*")
+        local outputPath = path.join(os.projectdir(), "bin/" .. target:name())
+        os.cp(resourcesPath, outputPath)
+    end)

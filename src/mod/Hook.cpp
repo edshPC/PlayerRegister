@@ -6,12 +6,10 @@
 #include "PlayerRegisterMod.h"
 #include "manager/PlayerManager.h"
 
-#include <mc/certificates/Certificate.h>
 #include <mc/deps/ecs/gamerefs_entity/EntityContext.h>
 #include <mc/deps/ecs/gamerefs_entity/EntityRefTraits.h>
 #include <mc/network/ConnectionRequest.h>
 #include <mc/network/ServerNetworkHandler.h>
-#include <mc/network/packet/LoginPacket.h>
 #include <mc/server/ServerPlayer.h>
 #include <mc/world/level/storage/DBStorage.h>
 
@@ -71,21 +69,27 @@ LL_TYPE_INSTANCE_HOOK(
 }
 
 // LeviLamina method hook to support other mods
-LL_TYPE_INSTANCE_HOOK(FakeGetUuidHook, HookPriority::Normal, Player, &Player::getUuid, mce::UUID const&) {
+LL_TYPE_INSTANCE_HOOK(FakeGetUuidHook, HookPriority::High, Player, &getUuid, mce::UUID const&) {
     return PlayerManager::getFakeUUID(this);
+}
+
+LL_TYPE_INSTANCE_HOOK(FakeGetXuidHook, HookPriority::High, Player, &$getXuid, string) {
+    auto& data = PlayerManager::getPlayerData(this);
+    if (data.fakeXUID.empty()) return origin();
+    return data.fakeXUID;
 }
 
 LL_TYPE_INSTANCE_HOOK(
     FakeGetPlayerHook,
-    HookPriority::Normal,
+    HookPriority::High,
     Level,
     &$getPlayer,
     Player*,
     mce::UUID const& uuid
 ) {
     if (Player* ori = origin(uuid)) return ori;
-    for (auto& en : PlayerManager::getAllData()) {
-        if (en.second.fakeUUID == uuid) return en.first;
+    for (auto& [pl, data] : PlayerManager::getAllData()) {
+        if (data.fakeUUID == uuid) return pl;
     }
     return nullptr;
 }
@@ -95,9 +99,12 @@ bool setupHooks() {
     OnPlayerLeftHook::hook();
     DBStorageFakeLoadHook::hook();
     DBStorageFakeSaveHook::hook();
-    if (CONF.fake_ll_uuid) {
+    if (CONF.fake_uuid) {
         FakeGetUuidHook::hook();
         FakeGetPlayerHook::hook();
+    }
+    if (CONF.fake_xuid) {
+        FakeGetXuidHook::hook();
     }
     return true;
 }
