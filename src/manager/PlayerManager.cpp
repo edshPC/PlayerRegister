@@ -58,7 +58,6 @@ const unordered_map<Player*, PlayerData>& PlayerManager::getAllData() {
     return playersData;
 }
 string PlayerManager::getId(Player* pl) {
-    if (string xuid = pl->getXuid(); !xuid.empty()) return xuid;
     return pl->getConnectionRequest()->getDeviceId();
 }
 void PlayerManager::reconnect(Player* pl) {
