@@ -30,7 +30,7 @@ LL_TYPE_INSTANCE_HOOK(
 }
 LL_TYPE_INSTANCE_HOOK(
     OnPlayerLeftHook,
-    HookPriority::Low,
+    HookPriority::High,
     ServerNetworkHandler,
     &_onPlayerLeft,
     void,
@@ -81,17 +81,16 @@ LL_TYPE_INSTANCE_HOOK(FakeGetXuidHook, HookPriority::High, Player, &$getXuid, st
 
 LL_TYPE_INSTANCE_HOOK(
     FakeGetPlayerHook,
-    HookPriority::High,
+    HookPriority::Highest,
     Level,
     &$getPlayer,
     Player*,
     mce::UUID const& uuid
 ) {
-    if (Player* ori = origin(uuid)) return ori;
-    for (auto& [pl, data] : PlayerManager::getAllData()) {
-        if (data.fakeUUID == uuid) return pl;
+    if (auto pl = PlayerManager::getPlayerByUUID(uuid); pl) {
+        return pl;
     }
-    return nullptr;
+    return origin(uuid);
 }
 
 bool setupHooks() {

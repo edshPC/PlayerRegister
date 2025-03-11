@@ -41,6 +41,9 @@ void Database::loadAsPlayer(PlayerData& data) {
     deserializeData(j, data);
     data.valid = true;
 }
+bool Database::removePlayer(const std::string& id) {
+    return db->del("player_" + id);
+}
 
 void Database::storeAsAccount(const PlayerData& data) {
     json j;

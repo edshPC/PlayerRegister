@@ -33,6 +33,7 @@ public:
     static void unloadPlayer(Player* pl);
 
     static const PlayerData& getPlayerData(Player* pl);
+    static Player* getPlayerByUUID(const mce::UUID& uuid);
     static const unordered_map<Player*, PlayerData>& getAllData();
     static string getId(Player* pl);
     static void reconnect(Player* pl);

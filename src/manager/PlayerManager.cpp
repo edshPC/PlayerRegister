@@ -11,6 +11,7 @@ namespace PlayerRegister {
 
 unordered_map<Player*, PlayerData>      playersData;
 unordered_map<std::string, std::string> fakeDBkeys; // player_server_{uuid}
+unordered_map<mce::UUID, Player*>       playerUUIDs;
 
 const PlayerData emptyData{"null", "[Not registered]"};
 
@@ -30,6 +31,7 @@ void PlayerManager::setFakeDBkey(Player* pl) {
 }
 void PlayerManager::setPlayerData(Player* pl, PlayerData& data) {
     playersData[pl] = data;
+    playerUUIDs[pl->getUuid()] = pl;
     if(!data.fakeDBkey.empty()) setFakeDBkey(pl);
 }
 void PlayerManager::loadPlayer(Player* pl) {
@@ -48,11 +50,16 @@ void PlayerManager::loadPlayer(Player* pl) {
 }
 void PlayerManager::unloadPlayer(Player* pl) {
     playersData.erase(pl);
+    playerUUIDs.erase(pl->getUuid());
     fakeDBkeys.erase(PlayerDataSystem::serverKey(LEVEL->getLevelStorage(), *pl));
 }
 const PlayerData& PlayerManager::getPlayerData(Player* pl) {
     if (playersData.contains(pl)) return playersData.at(pl);
     return emptyData;
+}
+Player* PlayerManager::getPlayerByUUID(const mce::UUID& uuid) {
+    if (playerUUIDs.contains(uuid)) return playerUUIDs.at(uuid);
+    return nullptr;
 }
 const unordered_map<Player*, PlayerData>& PlayerManager::getAllData() {
     return playersData;

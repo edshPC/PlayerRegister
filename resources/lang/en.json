@@ -14,9 +14,11 @@
     "form.info.header": "§bAccount info",
     "form.info.description": "§aYou are logged in: §b{}\n§eIf you are logged into XBOX, you don't need to have an account",
     "form.info.change_password": "§l§cChange password",
+    "form.info.logout": "§l§cLogout\n§r§6You will be taken to your XBOX or a new account",
     "form.change_password.header": "§bChange password",
     "form.change_password.password": "§eEnter new password:",
     "form.change_password.success": "§aPassword changed successfully!",
+    "form.error_send": "§cError in registration form.\nReconnect server or contact admin",
 
     "register.max_accounts": "You have already created maximum number of accounts",
     "register.success": "§aThe account has been created and linked successfully!",

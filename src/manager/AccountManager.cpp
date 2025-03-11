@@ -78,21 +78,26 @@ void AccountManager::loginOrRegisterForm(Player& pl, const string& repeat_reason
     form.appendToggle("is_login", TR(from.is_login), is_login);
     form.appendInput("name", TR(form.reg.name), "", pl.getRealName());
     form.appendInput("password", TR(form.reg.password));
-    form.sendTo(pl, [](Player& pl, CustomFormResult const& res, FormCancelReason cancel) {
-        if (cancel.has_value()) return loginOrRegisterForm(pl);
-        FORM_GET(is_login, uint64);
-        FORM_GET(name, string);
-        FORM_GET(password, string);
-        trim_string(name);
-        trim_string(password);
-        if (is_login) {
-            if (!loginAccount(pl, name, password)) loginOrRegisterForm(pl, TR(form.incorrect_pass), is_login);
-            return;
-        }
-        if (name.length() < 4 || password.length() < 4)
-            loginOrRegisterForm(pl, TR(form.name_or_pass_too_short), is_login);
-        else if (!createAccount(pl, name, password)) loginOrRegisterForm(pl, TR(form.account_exists), is_login);
-    });
+    try {
+        form.sendTo(pl, [](Player& pl, CustomFormResult const& res, FormCancelReason cancel) {
+           if (cancel.has_value()) return loginOrRegisterForm(pl);
+           FORM_GET(is_login, uint64);
+           FORM_GET(name, string);
+           FORM_GET(password, string);
+           trim_string(name);
+           trim_string(password);
+           if (is_login) {
+               if (!loginAccount(pl, name, password)) loginOrRegisterForm(pl, TR(form.incorrect_pass), is_login);
+               return;
+           }
+           if (name.length() < 4 || password.length() < 4)
+               loginOrRegisterForm(pl, TR(form.name_or_pass_too_short), is_login);
+           else if (!createAccount(pl, name, password)) loginOrRegisterForm(pl, TR(form.account_exists), is_login);
+       });
+    } catch (std::exception& e) {
+        LOGGER.error("error sending form: {}", e.what());
+        pl.disconnect(TR(form.error_send));
+    }
 }
 void AccountManager::registerForm(Player& pl, const string& repeat_reason) {
     CustomForm form{TR(form.reg.header)};
@@ -129,7 +134,7 @@ void AccountManager::infoForm(Player& pl) {
     auto&      data        = PlayerManager::getPlayerData(&pl);
     string     description = std::vformat(TR(form.info.description), std::make_format_args(data.name));
     SimpleForm form{TR(form.info.header), description};
-    if (data.valid && data.accounts)
+    if (data.valid && data.accounts) {
         form.appendButton(TR(form.info.change_password), [data](Player& pl) {
             CustomForm form{TR(form.change_password.header)};
             form.appendInput("password", TR(form.change_password.password));
@@ -141,6 +146,12 @@ void AccountManager::infoForm(Player& pl) {
                 else if (changePassword(data.name, password)) pl.sendMessage(TR(form.change_password.success));
             });
         });
+        form.appendButton(TR(form.info.logout), [](Player& pl) {
+            if (Database::removePlayer(PlayerManager::getId(&pl))) {
+                PlayerManager::reconnect(&pl);
+            }
+        });
+    }
     form.sendTo(pl);
 }
 
