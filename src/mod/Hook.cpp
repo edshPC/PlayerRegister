@@ -7,7 +7,7 @@
 #include "manager/PlayerManager.h"
 
 #include <mc/deps/ecs/gamerefs_entity/EntityContext.h>
-#include <mc/deps/ecs/gamerefs_entity/EntityRefTraits.h>
+#include <mc/deps/ecs/gamerefs_entity/GameRefsEntity.h>
 #include <mc/network/ConnectionRequest.h>
 #include <mc/network/ServerNetworkHandler.h>
 #include <mc/server/ServerPlayer.h>

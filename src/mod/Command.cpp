@@ -28,16 +28,16 @@ EXECUTE_CMD(Account) {
         AccountManager::infoForm(*pl);
         break;
     }
-    out.success();
+    out.success("");
 }
 
 EXECUTE_CMD(ResetPass) {
     ori;
-    string name     = param.account_name.getText();
+    string name     = param.account_name.mText;
     string password = mce::UUID::random().asString().substr(0, 8);
     if (!AccountManager::changePassword(name, password)) return out.error(TR(command.reset_password.not_found));
     LOGGER.warn(std::vformat(TR(command.reset_password.success), std::make_format_args(name, password)));
-    out.success();
+    out.success("");
 }
 
 bool Command::init() {
