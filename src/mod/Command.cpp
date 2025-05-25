@@ -28,7 +28,7 @@ EXECUTE_CMD(Account) {
         AccountManager::infoForm(*pl);
         break;
     }
-    out.success("");
+    out.mSuccessCount++;
 }
 
 EXECUTE_CMD(ResetPass) {
@@ -37,7 +37,7 @@ EXECUTE_CMD(ResetPass) {
     string password = mce::UUID::random().asString().substr(0, 8);
     if (!AccountManager::changePassword(name, password)) return out.error(TR(command.reset_password.not_found));
     LOGGER.warn(std::vformat(TR(command.reset_password.success), std::make_format_args(name, password)));
-    out.success("");
+    out.mSuccessCount++;
 }
 
 bool Command::init() {
