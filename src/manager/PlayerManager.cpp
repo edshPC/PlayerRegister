@@ -69,10 +69,7 @@ string PlayerManager::getId(Player* pl) {
 }
 void PlayerManager::reconnect(Player* pl) {
     if (CONF.reconnect) {
-        TransferPacket pkt;
-        pkt.mServerAddress = CONF.reconnect_ip;
-        pkt.mServerPort = CONF.reconnect_port;
-        pkt.mReloadWorld = false;
+        TransferPacket pkt{CONF.reconnect_ip, CONF.reconnect_port};
         pl->sendNetworkPacket(pkt);
     } else pl->disconnect(TR(player.reconnect));
 }

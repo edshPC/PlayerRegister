@@ -12,7 +12,7 @@ public:
     int max_accounts = 3;
     bool reconnect = false;
     string reconnect_ip = "127.0.0.1";
-    int reconnect_port = 19132;
+    ushort reconnect_port = 19132;
     bool fake_uuid = true;
     bool fake_xuid = true;
 

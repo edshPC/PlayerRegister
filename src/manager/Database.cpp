@@ -24,7 +24,7 @@ static void deserializeData(const json& j, PlayerData& data) {
     data.name      = j["name"].get<std::string>();
     data.password  = j["password"].get<std::string>();
     data.accounts  = j["accounts"].get<int>();
-    data.fakeUUID  = j["fakeUUID"].get<std::string>();
+    data.fakeUUID  = mce::UUID::fromString(j["fakeUUID"].get<std::string>());
     data.fakeXUID  = j["fakeXUID"].get<std::string>();
     data.fakeDBkey = j["fakeDBkey"].get<std::string>();
 }

@@ -151,7 +151,7 @@ void AccountManager::infoForm(Player& pl) {
                 PlayerManager::reconnect(&pl);
             }
         });
-    }
+    } else form.appendButton("§aOK");
     form.sendTo(pl);
 }
 
