@@ -80,7 +80,7 @@ void AccountManager::loginOrRegisterForm(Player& pl, const string& repeat_reason
     form.appendInput("password", TR(form.reg.password));
     try {
         form.sendTo(pl, [](Player& pl, CustomFormResult const& res, FormCancelReason cancel) {
-           if (cancel.has_value()) return loginOrRegisterForm(pl);
+           if (cancel.has_value()) return pl.disconnect(TR(form.log_or_reg.nessesary));
            FORM_GET(is_login, uint64);
            FORM_GET(name, string);
            FORM_GET(password, string);
